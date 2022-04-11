@@ -1,5 +1,5 @@
 ---
-title: "Mapping Birdsong Project - Latitude"
+title: "Mapping Birdsong - Latitude"
 author: "Mike Allen"
 date: "1/31/2022"
 output: html_document
@@ -9,18 +9,25 @@ Click the green arrow to run this code. Make sure there is only one file (the cs
 ```{r}
 # load the function libraries called "dplyr" and "ggplot2"
 # note: this also installs them if they are not yet installed
-if(require("dplyr")==F){install.packages("dplyr")}
-if(require("ggplot2")==F){install.packages("ggplot2")}
-
+if (require("dplyr") == F) {
+  install.packages("dplyr")
+}
+if (require("ggplot2") == F) {
+  install.packages("ggplot2")
+}
 
 # read in the data from your "my_raw_data" folder
 # note: it also prints a warning if you have >1 file in your folder
-if(length(list.files("my_raw_data"))!= 1){warning("Only 1 file can be in the my_raw_data folder. Please delete any except the one you want to analyze.")} else{
-my_data <- read.csv(paste0("my_raw_data/", 
-                           list.files("my_raw_data"))) %>%
-  filter(Average.Community.Rating>=4,
-         is.na(Latitude) != TRUE) %>%
-  rename(cat_num = 1)
+if (length(list.files("my_raw_data")) != 1) {
+  warning(
+    "Only 1 file can be in the my_raw_data folder. Please delete any except the one you want to analyze."
+  )
+} else{
+  my_data <- read.csv(paste0("my_raw_data/",
+                             list.files("my_raw_data"))) %>%
+    filter(Average.Community.Rating >= 4,
+           is.na(Latitude) != TRUE) %>%
+    rename(cat_num = 1)
 }
 ```
 # Calculate how many samples to take from each latitude band
@@ -36,7 +43,7 @@ if(num_bands < 25){num_samps <- 2}
 if(num_bands < 12){num_samps <- 3}
 ```
 # Create final the data file
-Hit the green arrow to run this code that creates a final data file with about 25 songs spread out across the species range that you will use for taking measurements.
+Hit the green arrow to run this code that creates a final data file with about 25-50 songs spread out across the species range that you will use for taking measurements.
 ```{r}
 # create a data set called my_data_final
 my_data_final <- my_data %>%
