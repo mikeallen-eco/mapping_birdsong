@@ -1,51 +1,32 @@
-# Geography of Birdsong Project (mapping_birdsong)
-Steps:
-1. Download this repository to your computer and unzip it (don't change folder or file names or locations yet).
-2. Look through your field guide paying special attention to species range maps and comments about their vocalizations. Select a species that interests you and might have an interesting evolutionary story to tell.
-3. Go to https://www.macaulaylibrary.org/ and enter the species name to retrieve media.
-4. Apply filters to limit your selection to 1) audio by clicking the speaker button in the header, and 2) song (unless you want to analyze call notes) by clicking "More filters" and checking the "song" box.
-5. Download the spreadsheet for the resulting data.
-6. Move the file into the "data" folder.
-7. Open the R project by double clicking the .Rproj file (you should already have R and RStudio free version installed).
-8. Open the RMarkdown file and follow the directions in it.
+# The 'Mapping Birdsong' Project
+In this project, we'll come up with some hypotheses about ways the  vocalizations of a bird species (birdsong) may change across space (the map!). Then, we'll use the MacAulay Library's vast collection, coupled with some low-tech tools (rulers!), to actually collect some measurements and see what the data tell us. While this analysis won't reveal WHY these patterns occur, they may reveal some new questions that are worth exploring.
 
-Directions below here need editing once Rmarkdown is done...
+## Overview
+Each group will choose a species, construct a hypothesis, download and process a dataset, view sonograms and make some measurements, and graph the results.
 
-0. Click the upper left corner to highlight all cells
-11. data tab click the Filter button
-on header "average community rating" uncheck all then re-check only those with >= 4
-Latitude" uncheck the box next to "blanks" ensuring you only have records with geographic info
-How many records are left?
-Sort by latitude or longitude (whichever you are intersted in). What is the range? How many degrees are covered?
-We'll now divide up our samples into latitude or longitude "bins"
-Add a column named "samples" next to the sorted latitude or longitude column.
-Calculate the a number of samples "n" per bin required to give you a total sample size of at least 25
-Put a 1 in the "samples" column for the top "n" samples in each bin. Some bins may only have one sample. That's ok. If you still need more samples to reach 25 once you are done with that, go back through and place an extra 1 in every other bin with enough records. Repeat if necessary to reach 25.
-Sort by the "samples" column so that all of your chosen samples are on top. Are there at least 25? 
-In the Data tab, click the "Filter" button again so that all data are visible. 
-Delete all rows that do not have a 1 in the sample column.
+## Step-by-step instructions - Phase 1
+0. If you don't have (or want) RStudio on your computer log into the virtual computer lab (https://it.rutgers.edu/virtual-computer-labs/). In the virtual lab, RStudio is located in the "Programs" folder in the "Class Software" subfolder.
+1. Open a web browser and go to: https://github.com/mikeallen-eco/mapping_birdsong.
+Download the code repository by clicking the green "Code" button. Unzip the folder it somewhere you can find it. (Don't change any folder or file names or locations yet.)
+2. Now, look through your field guide paying special attention to species range maps and comments about their vocalizations. Select a species that interests you and that you think might have an interesting evolutionary story to tell.
+3. Back in the web browser, go to https://www.macaulaylibrary.org/ and enter a species name in the search box to start viewing sonograms for your species. View many examples of the species' sonograms. Think of an interesting property of the song that you can measure either visually (e.g., syllable counts, max frequency) or with a ruler (e.g., syllables per second, total trill duration, duration of some other part of the song, etc.). 
+4. Use the 'filters' in the Macaulay website to limit your selection to 1) audio by clicking the speaker button in the header, and 2) song (unless you want to analyze call notes) by clicking "More filters" and checking the "song" box.
+5. Download the spreadsheet (csv file) for the resulting data.
+6. Move the csv file you downloaded into the "my_raw_data" folder of the code repository you downloaded. DELETE THE EXAMPLE FILE THAT IS CURRENTLY IN THERE FIRST. THERE SHOULD ONLY BE ONE FILE IN THE my_raw_data FOLDER.
+7. Now it's time to process your song data file. Open the R project by double clicking the "mapping_birdsong.Rproj"" file. This will only work if you 1) are in a virtual workstation, or 2) already have R and RStudio installed. (They are free programs.)
+8. Within RStudio, open the file called "mapping_birdsong_latitude.Rmd" or "mapping_birdsong_longitude.Rmd". These "RMarkdown" files contain code to process your raw data file (which now should be in the "my_raw_data" folder) and directions on how to run it. Follow the directions in that file. If you do it correctly, it should result in a file called "my_data_file.csv" being created in the "my_output" folder. This file contains a subset of songs from the original data file, chosen to be a random sample of about 25-50 songs, spread out over space (latitude or longitude depending on which file you used), and with a "quality" rating of 4 or higher.
 
-Now start to explore your samples. Paste the ML catalog number after the following URL:
-https://macaulaylibrary.org/asset/
-For example Prairie Warbler sample 110249 would be:
-https://macaulaylibrary.org/asset/110249
+Once you are done with Step 8, come back here...
 
-Now it is time to select a measurement or specific research question. Listen to the songs and look at the sonograms. What might be an interesting aspect to measure that might vary across space?
+## Step-by-step instructions - Phase 2
+9.Open the "my_data_file.csv" file (in the "my_output"" folder) using your favorite spreadsheet software.
+10. Save a copy of the "my_data_file.csv" in the same folder and name it "my_complete_data_file.csv". This will prevent you from accidentally overwriting the file with a blank one if you stop halfway, come back, and rerun the code again.
+11. Time to find a sonogram and make your first measurement. Paste the first URL in the "link" column of "my_complete_data_file.csv" into a web browser. It will look something like this: https://macaulaylibrary.org/asset/110249
+12. Now use a ruler (or your eyes) to make your first measurement on the sonogram associated with that link. Remember, it can be anything you think might vary: trill rate (syllables/s)? minimum, maximum, or range of frequencies (kilohertz)? a ratio of some sort? the duration of a certain part of the song (seconds)? Just be sure to keep your method of measurement consistent throughout all samples. To standardize things, measure the first example of whatever you are measuring that appears in the sonogram (e.g., if you are interested in trills, measure the first trill that appears in each sonogram). Put the measured value (number) in the "measurement" column. Put the units (seconds, syllables/second, kHz, etc.) in the "measurement_units" column. Hint: if you use a ruler to measure height or width on the sonogram in mm, be sure to convert to time or frequency when inputting data. Do this by also measuring the height of 1 kHz or 1 second.
+13. Repeat this process for each link in the data file. Be sure to save your "my_complete_data_file.csv" file. You can stop partway and finish later. But be careful to save and (ideally) take the whole code repository (the "mapping_birdsong"" folder) with you if you are on a virtual lab machine. For example, you can zip it and email it to yourself. 
+14. While you are measuring, take a screenshot of a representative sonogram and annotate it with text and markings showing what you measured. Save it as a png or jpg file to the "my_output" folder. You will refer to this in your Methods text below.
 
-Trill rate?
-Minimum, maximum, or range of frequency (kilohertz)?
-How often (e.g., what proportion of total) certain syllable types appear?
-How close together in time the phrases are?
-The number of syllables per phrase?
-
-how to measure: use a ruler to measure height or width in mm
-also include: the length of 1 s and 1 kHz in mm on your screen
-
-
- 
-
-
-
-
-
-
+## Step-by-step instructions - Phase 3
+15. Once you are done collecting all your measurements, go back to the "mapping_birdsong.Rmd" file in RStudio to plot your results. DO NOT RE-RUN ALL THE CODE. At this point, you just want to run the part that says "Graph the results" near the bottom. This will produce a plot of your measurement (y-axis) versus latitude or longitude (whichever one you chose). The code will also save the plot as a png file to your "my_output" folder.
+16. Describe your Methods by editing and running the relevant chunk of code in "mapping_birdsong.Rmd" that follows the one where you made your plot. Be sure to reference the screenshot figure you made.
+17. Describe your Results by editing and running the relevant chunk of code in "mapping_birdsong.Rmd" that follows the one where you wrote your Methods. Be sure to reference the figure you made that plotted your measurements vs. latitude or longitude. Did you find a clear pattern, no pattern, or something in between?
