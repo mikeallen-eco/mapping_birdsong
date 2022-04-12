@@ -1,5 +1,5 @@
 ---
-title: "Mapping Birdsong"
+title: "The 'Mapping Birdsong' Project"
 author: "Mike Allen"
 date: "1/31/2022"
 output: html_document
