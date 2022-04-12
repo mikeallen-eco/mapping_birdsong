@@ -88,8 +88,7 @@ data_complete %>%
   labs(y = your_units, title = your_species)
 
 # save the plot
-ggsave("my_output/my_plot.png", height = 4, width = 6, dpi = 300)
-
+ggsave("my_output/my_plot.png", height = 4, width = 6, dpi = 72)
 ```
 # Describe your methods
 Replace the DESCRIBE YOUR METHODS HERE text with your own. Don't delete any of the quotation marks or other text. Be sure to clearly describe what you measured and how. Write as much as you need to, but only replace the text within the asterisks(*). After you are done writing, run the code to write a text file using the green arrow.
