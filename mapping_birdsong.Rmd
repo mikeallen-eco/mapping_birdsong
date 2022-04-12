@@ -1,11 +1,11 @@
 ---
-title: "Mapping Birdsong - Latitude"
+title: "Mapping Birdsong"
 author: "Mike Allen"
 date: "1/31/2022"
 output: html_document
 ---
 # Load libraries and read in your data file
-Click the green arrow to run this code. Make sure there is only one file (the csv you downloaded from Macaulay Library) in the "my_raw_data" folder. Note that it only keeps songs with a known location (lattitude) and with a quality score of 4 or greater.
+This code file is organized into discrete "chuClick the green arrow to run this code. Make sure there is only one file (the csv you downloaded from Macaulay Library) in the "my_raw_data" folder. Note that it only keeps songs with a known location (lattitude) and with a quality score of 4 or greater.
 ```{r}
 # load the function libraries called "dplyr" and "ggplot2"
 # note: this also installs them if they are not yet installed
@@ -15,6 +15,9 @@ if (require("dplyr") == F) {
 if (require("ggplot2") == F) {
   install.packages("ggplot2")
 }
+
+library(dplyr)
+library(ggplot2)
 
 # read in the data from your "my_raw_data" folder
 # note: it also prints a warning if you have >1 file in your folder
@@ -34,34 +37,59 @@ if (length(list.files("my_raw_data")) != 1) {
 Hit the green arrow to run this code that determines how many songs to randomly select from each latitude band so that we end up with about 25-50 songs spread out across the range of the species.
 ```{r}
 # calculate number of latitude bands your data spans
-  num_bands <-
+  num_lat_bands <-
     length(unique(floor(my_data$Latitude)))
 
+# calculate number of latitude bands your data spans
+  num_lon_bands <-
+    length(unique(floor(my_data$Longitude)))
+
 # calculate the number of samples to take from each band
-if(num_bands >= 25){num_samps <- 1}
-if(num_bands < 25){num_samps <- 2}
-if(num_bands < 12){num_samps <- 3}
+if(num_lat_bands >= 25){num_lat_samps <- 1}
+if(num_lat_bands < 25){num_lat_samps <- 2}
+if(num_lat_bands < 12){num_lat_samps <- 3}
+if(num_lon_bands >= 25){num_lon_samps <- 1}
+if(num_lon_bands < 25){num_lon_samps <- 2}
+if(num_lon_bands < 12){num_lon_samps <- 3}
 ```
 # Create final the data file
-Hit the green arrow to run this code that creates a final data file with about 25-50 songs spread out across the species range that you will use for taking measurements.
+Hit the green arrow to run this code that creates two final data files, each with about 25-50 songs spread out across the species range (by latitude or longitude, respectively) that you will use for taking measurements.
 ```{r}
-# create a data set called my_data_final
-my_data_final <- my_data %>%
+# create a data set stratified by latitude: my_data_final_lat
+my_data_final_lat <- my_data %>%
   arrange(runif(1:nrow(my_data))) %>%
   group_by(floor(Latitude)) %>%
-  slice_sample(n = num_samps) %>%
+  slice_sample(n = num_lat_samps) %>%
+  ungroup() %>%
   select(cat_num, Latitude, Longitude) %>%
   mutate(link = paste0("https://macaulaylibrary.org/asset/", 
                        cat_num),
-         measurement = "", measurement_units = ""
+         measurement = "", measurement_units = "", 
+         skip_notes = ""
 )
 
-# write the final data set to a csv file
-# note: this also checks if you already have a file called "my_data_file.csv" to avoid accidentally overwriting data.
-if(file.exists("my_output/my_data_file.csv")==T){warning("my_data_file.csv already exists. Rename it and try again.")} else{
-write.csv(my_data_final, "my_output/my_data_file.csv",
+# create a data set stratified by longitude: my_data_final_lon
+my_data_final_lon <- my_data %>%
+  arrange(runif(1:nrow(my_data))) %>%
+  group_by(floor(Longitude)) %>%
+  slice_sample(n = num_lon_samps) %>%
+  ungroup() %>%
+  select(cat_num, Latitude, Longitude) %>%
+  mutate(link = paste0("https://macaulaylibrary.org/asset/", 
+                       cat_num),
+         measurement = "", measurement_units = "", 
+         skip_notes = ""
+)
+
+# write the final "blank" data files to csv files
+
+write.csv(my_data_final_lat, 
+          "my_output/my_blank_data_file_latitude.csv",
           row.names = F)
-}
+
+write.csv(my_data_final_lon, 
+          "my_output/my_blank_data_file_longitude.csv",
+          row.names = F)
 
 ```
 # Making your measurements
@@ -69,15 +97,55 @@ At this point, minimize RStudio, go back to the README file, and complete steps 
 
 # Graph the results
 Use this code to plot your results. It will save a png file to the "my_output" folder. Before you run it, change the 2nd and 3rd lines of the code to reflect your correct units and species. After you run this chunk of code, go ahead and complete the remaining sections of code in this file (described in README steps 15-17).
+# First input the correct measurement units and species
+Change the quoted text to reflect your own study.
 ```{r}
-# input the correct measurement units and species
 your_units <- "Number of syllables in trill"
 your_species <- "Prairie Warbler"
+```
+# Make the plots
+Run this chunk (click the green arrow) to make and save the plots. They should appear in your "my_output".
+```{r}
+# check if output files exist
+lat_exists <- 
+  file.exists("my_output/my_complete_data_file_latitude.csv")
+lon_exists <- 
+  file.exists("my_output/my_complete_data_file_longitude.csv")
 
-# read in the completed data file
-data_complete <- read.csv("my_output/my_complete_data_file.csv")
+# read in the completed latitude data file
+if(lat_exists){
+data_complete_lat <- read.csv(
+  "my_output/my_complete_data_file_latitude.csv"
+  )
+}
 
-# plot the data
+# read in the completed longitude data file
+if(lon_exists){
+data_complete_lon <- read.csv(
+  "my_output/my_complete_data_file_longitude.csv"
+  )
+}
+
+# combine the two data files (if they exist)
+if(lat_exists & lon_exists){
+  data_complete <- 
+    data_complete_lat %>%
+    bind_rows(data_complete_lon)
+}
+
+if(lat_exists==T & lon_exists==F){
+  data_complete <- data_complete_lat}
+
+if(lat_exists==F & lon_exists==T){
+  data_complete <- data_complete_lon}
+
+# make sure you have the required packages just in case
+if(require(ggplot2)==F){install.packages("ggplot2")
+  library(ggplot2)}
+if(require(dplyr)==F){install.packages("dplyr")
+  library(dplyr)}
+
+# plot the measurement by latitude
 data_complete %>%
   ggplot(aes(x = Latitude, y = measurement)) +
   geom_point(size = 4) +
@@ -87,8 +155,68 @@ data_complete %>%
   theme(text = element_text(size = 14)) +
   labs(y = your_units, title = your_species)
 
-# save the plot
-ggsave("my_output/my_plot.png", height = 4, width = 6, dpi = 72)
+# save the latitude plot
+ggsave("my_output/my_plot_latitude.png", 
+       height = 4, width = 6, dpi = 100)
+
+# plot the measurement by longitude
+data_complete %>%
+  ggplot(aes(x = Longitude, y = measurement)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "loess", se = F, color = "firebrick") +
+  geom_smooth(method = "lm", se = T, color = "darkgray", lty = 2) +
+  theme_bw() + 
+  theme(text = element_text(size = 14)) +
+  labs(y = your_units, title = your_species)
+
+# save the longitude plot
+ggsave("my_output/my_plot_longitude.png", 
+       height = 4, width = 6, dpi = 100)
+
+```
+# Map the results
+```{r}
+# make sure you have the required packages installed
+if(require(rnaturalearth)==F){install.packages("rnaturalearth")}
+if(require(sf)==F){install.packages("sf")}
+if(require(viridis)==F){install.packages("viridis")}
+if(require(ggplot2)==F){install.packages("ggplot2")}
+if(require(dplyr)==F){install.packages("dplyr")}
+library(rnaturalearth)
+library(sf)
+library(viridis)
+library(ggplot2)
+library(dplyr)
+
+# make the data into a "spatial" format
+data_spatial <- data_complete %>%
+  mutate(lat = Latitude, lon = Longitude) %>%
+  sf::st_as_sf(coords = c("Longitude", "Latitude"), 
+               crs = 4326) 
+
+# load the continental boundaries
+state_bounds <- ne_coastline(scale = 10, returnclass = "sf") %>%
+  st_crop(st_buffer(data_spatial, dist = 2000000))
+
+# make the map
+data_spatial %>%
+  ggplot() +
+  geom_point(aes(x = lon, y = lat, 
+                 size = measurement,
+                 color = measurement), 
+            alpha = .75) +
+  viridis::scale_color_viridis(option = "magma") +
+  geom_sf(data = state_bounds, aes(), color = "gray",
+          size = .25) + 
+  theme_bw() + 
+  theme(text = element_text(size = 14)) +
+  labs(size = your_units, title = your_species,
+       x = "", y = "", color = your_units)
+
+# save the map
+ggsave("my_output/my_map.png", 
+       height = 6, width = 7, dpi = 100)
+
 ```
 # Describe your methods
 Replace the DESCRIBE YOUR METHODS HERE text with your own. Don't delete any of the quotation marks or other text. Be sure to clearly describe what you measured and how. Write as much as you need to, but only replace the text within the asterisks(*). After you are done writing, run the code to write a text file using the green arrow.
