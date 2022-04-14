@@ -59,6 +59,8 @@ Hit the green arrow to run this code that creates two final data files, each wit
 my_data_final_lat <- my_data %>%
   arrange(runif(1:nrow(my_data))) %>%
   group_by(floor(Latitude)) %>%
+  mutate(nbin = length(floor(Latitude))) %>%
+  filter(nbin >= num_lat_samps) %>%
   slice_sample(n = num_lat_samps) %>%
   ungroup() %>%
   select(cat_num, Latitude, Longitude) %>%
@@ -72,6 +74,8 @@ my_data_final_lat <- my_data %>%
 my_data_final_lon <- my_data %>%
   arrange(runif(1:nrow(my_data))) %>%
   group_by(floor(Longitude)) %>%
+  mutate(nbin = length(floor(Longitude))) %>%
+  filter(nbin >= num_lon_samps) %>%
   slice_sample(n = num_lon_samps) %>%
   ungroup() %>%
   select(cat_num, Latitude, Longitude) %>%
