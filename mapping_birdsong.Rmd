@@ -110,6 +110,12 @@ your_species <- "Prairie Warbler"
 # Make the plots
 Run this chunk (click the green arrow) to make and save the plots. They should appear in your "my_output".
 ```{r}
+# make sure you have the required packages just in case
+if(require(ggplot2)==F){install.packages("ggplot2")
+  library(ggplot2)}
+if(require(dplyr)==F){install.packages("dplyr")
+  library(dplyr)}
+
 # check if output files exist
 lat_exists <- 
   file.exists("my_output/my_complete_data_file_latitude.csv")
@@ -142,12 +148,6 @@ if(lat_exists==T & lon_exists==F){
 
 if(lat_exists==F & lon_exists==T){
   data_complete <- data_complete_lon}
-
-# make sure you have the required packages just in case
-if(require(ggplot2)==F){install.packages("ggplot2")
-  library(ggplot2)}
-if(require(dplyr)==F){install.packages("dplyr")
-  library(dplyr)}
 
 # plot the measurement by latitude
 data_complete %>%
