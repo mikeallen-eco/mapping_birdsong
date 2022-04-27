@@ -28,5 +28,10 @@ Once you are done running the code for Step 8, come back here...
 
 ## Phase 3: plot your results
 15. Once you are done collecting all your measurements, go back to the "mapping_birdsong.Rmd" file in RStudio to plot your results. DO NOT RE-RUN ALL THE CODE. At this point, you just want to run the part that says "Graph the results" near the bottom. This will produce a plot of your measurement (on the y-axis) versus latitude and longitude (on the x-axis). BE SURE TO CHANGE THE SPECIES NAME AND MEASUREMENT UNITS BEFORE YOU MAKE THE PLOTS. The section after that will also produce a map of the measurements. These two chunks of code will also save all plots as png files to your "my_output" folder.
-16. Describe your Methods by editing and running the relevant chunk of code in "mapping_birdsong.Rmd" that follows the one where you made your plot. Be sure to reference the screenshot figure you made.
-17. Describe your Results by editing and running the relevant chunk of code in "mapping_birdsong.Rmd" that follows the one where you wrote your Methods. Be sure to reference the figure you made that plotted your measurements vs. latitude or longitude. Did you find a clear pattern, no pattern, or something in between? Do you recommend future birdsong mappers to collect more data on this hypothesis?
+16. Depending on which R version you are using, you may encounter an error installing the required package "rnaturalearthhires". If so, try first installing the package "devtools" and then the "rnaturalearthhires" package using this command: 
+```
+install.packages("devtools")
+devtools::install_github("ropensci/rnaturalearthhires")
+```
+17. Describe your Methods by editing and running the relevant chunk of code in "mapping_birdsong.Rmd" that follows the one where you made your plot. Be sure to reference the screenshot figure you made.
+18. Describe your Results by editing and running the relevant chunk of code in "mapping_birdsong.Rmd" that follows the one where you wrote your Methods. Be sure to reference the figure you made that plotted your measurements vs. latitude or longitude. Did you find a clear pattern, no pattern, or something in between? Do you recommend future birdsong mappers to collect more data on this hypothesis?
